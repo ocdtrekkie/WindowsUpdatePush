@@ -63,6 +63,10 @@ Module Module1
                     Dim winUpdateInstallResult As IInstallationResult = winUpdateInstaller.Install()
                     Console.WriteLine("Installation result: " & winUpdateInstallResult.ResultCode)
                     Console.WriteLine("Reboot required: " & winUpdateInstallResult.RebootRequired)
+                    If winUpdateInstallResult.RebootRequired = True Then
+                        Environment.ExitCode = 3010
+                        End
+                    End If
                 End If
             End If
             Environment.ExitCode = 0
