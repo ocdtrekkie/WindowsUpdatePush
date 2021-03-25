@@ -15,7 +15,6 @@ Module Module1
             Dim winUpdatesToDownload As New UpdateCollection
             Console.WriteLine("Found " & winUpdateResult.Updates.Count & " updates" & Environment.NewLine)
             For Each winUpdate As IUpdate In winUpdateResult.Updates
-                Console.WriteLine(winUpdate.Title)
                 If winUpdate.InstallationBehavior.CanRequestUserInput = True Then
                     Console.WriteLine("Skipping " & winUpdate.Title & " because it requires user input")
                 Else
