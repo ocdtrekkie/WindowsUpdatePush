@@ -2,6 +2,20 @@
 Imports System.Security.Principal
 
 Module Module1
+    Function InstallationResultToText(result)
+        Select Case result
+            Case 2
+                InstallationResultToText = "Succeeded"
+            Case 3
+                InstallationResultToText = "Succeeded with errors"
+            Case 4
+                InstallationResultToText = "Failed"
+            Case 5
+                InstallationResultToText = "Cancelled"
+            Case Else
+                InstallationResultToText = "Unexpected (" & result & ")"
+        End Select
+    End Function
 
     Sub Main()
         'https://docs.microsoft.com/en-us/windows/win32/wua_sdk/searching--downloading--and-installing-updates
@@ -35,7 +49,7 @@ Module Module1
             Else
                 Console.WriteLine("Script not running with elevation")
                 Environment.ExitCode = 5
-                End
+                Exit Sub
             End If
 
             If winUpdatesToDownload.Count > 0 Then
@@ -60,11 +74,11 @@ Module Module1
                     Dim winUpdateInstaller As UpdateInstaller = winUpdateSession.CreateUpdateInstaller()
                     winUpdateInstaller.Updates = winUpdatesToInstall
                     Dim winUpdateInstallResult As IInstallationResult = winUpdateInstaller.Install()
-                    Console.WriteLine("Installation result: " & winUpdateInstallResult.ResultCode)
+                    Console.WriteLine("Installation result: " & InstallationResultToText(winUpdateInstallResult.ResultCode))
                     Console.WriteLine("Reboot required: " & winUpdateInstallResult.RebootRequired)
                     If winUpdateInstallResult.RebootRequired = True Then
                         Environment.ExitCode = 3010
-                        End
+                        Exit Sub
                     End If
                 End If
             End If
