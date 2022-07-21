@@ -18,10 +18,27 @@ Module Module1
     End Function
 
     Sub Main()
+        Dim serverSelection As Integer = 0
+        Dim serviceId As String = ""
+
+        Dim arguments As String() = Environment.GetCommandLineArgs()
+        If arguments.Length > 1 Then
+            Select Case arguments(1)
+                Case "-microsoft"
+                    Console.WriteLine("Microsoft Update source selected.")
+                    serverSelection = 3
+                    serviceId = "7971f918-a847-4430-9279-4a52d1efe18d"
+            End Select
+        End If
+
         'https://docs.microsoft.com/en-us/windows/win32/wua_sdk/searching--downloading--and-installing-updates
         Dim winUpdateSession As New UpdateSession()
         winUpdateSession.ClientApplicationID = "WindowsUpdatePush"
         Dim winUpdateSearcher As IUpdateSearcher = winUpdateSession.CreateUpdateSearcher()
+        winUpdateSearcher.ServerSelection = serverSelection
+        If serviceId <> "" Then
+            winUpdateSearcher.ServiceID = serviceId
+        End If
 
         Try
             Console.WriteLine("Checking for updates...")
